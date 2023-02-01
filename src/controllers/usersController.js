@@ -1,4 +1,3 @@
-const { userModel } = require('../models/UserModel')
 const UserModel = require('../models/UserModel')
 
 class UsersController {
@@ -10,7 +9,7 @@ class UsersController {
     }
     // SHOW ONE
     async show(req, res) {
-        const user = await UserModel.findById(req.params.id)
+        const user = await UserModel.findById(req.userId)
         if (!user) return res.json('INVALID USER')
         return res.json(user)
     }
@@ -19,14 +18,20 @@ class UsersController {
         const user = await UserModel.createUser(req.body)
         return res.json(user)
     }
-    // UPDATED  
+    // EDIT  
     async updated(req, res) {
-        await UserModel.updateUser(req.params.id)
-        return res.json('TESTE')
+        try {
+            const user = await UserModel.updateUser(req.userId, req.body)
+            return res.json(user)
+        }
+        catch (err) {
+            return res.status(400).json('#ERROR')
+        }
     }
     // DELETE
     async delete(req, res) {
-        return res.json('DELETE STUDEND')
+        await UserModel.deleteUSer(req.params.id)
+        return res.json(`USER: ${req.params.id} has deleted`)
     }
 }
 

@@ -18,12 +18,6 @@ class MyApp {
                 this.app.emit('ready')
             })
             .catch(e => console.log(e))
-        // moongose.set('strictQuery', false)
-        // moongose.connect(process.env.mongostring)
-        //     .then(() => {
-        //         this.app.emit('ready')
-        //     })
-        //     .catch(e => console.log(e))
 
         this.app.use(express.urlencoded({ extended: true }))
         this.app.use(express.json())

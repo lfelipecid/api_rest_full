@@ -16,9 +16,13 @@ class UserModel {
 
     async findById(id) {
         if (id.length != 24) return false
-        const n_id = new ObjectId(id)
-        const user = await this.userModel.find({ _id: n_id }).toArray()
+        const user = await this.userModel.find({ _id: ObjectId(id) }).toArray()
         return user[0]
+    }
+
+    async findByEmail(email) {
+        const user = await this.userModel.findOne({ email })
+        return user
     }
 
     async mailExist(mail) {
@@ -60,6 +64,8 @@ class UserModel {
         // PathPhoto
         if (!body.pathPhoto) body.pathPhoto = ''
         body.createOn = new Date()
+        // Permission
+        if (!body.perm) body.perm = ''
 
         if (erros.length > 0) return erros
         return false
@@ -77,12 +83,29 @@ class UserModel {
         }
     }
 
-    async updateUser(id) {
+    // TODO: VALID FIELDS
+    async updateUser(id, body) {
         const user = await this.findById(id)
-        
-        console.log(user)
+
+        // Parse over BODY and fill USER
+        Object.entries(body).forEach(e => {
+
+            const [k, v] = e
+            if (k in user) user[k] = v // If key exist, fill
+
+        })
+
+        // SAVE @ DB
+        this.userModel.replaceOne(
+            { _id: ObjectId(id) },
+            user
+        )
+        return user
     }
 
+    async deleteUSer(id) {
+        await this.userModel.deleteOne({ _id: ObjectId(id) })
+    }
 }
 
 module.exports = new UserModel()
