@@ -4,6 +4,7 @@ const usersController = require('./controllers/usersController')
 const tokenController = require('./controllers/tokenController')
 const loginRequired = require('./middlewares/tokenMiddlewares').loginRequired
 const studentController = require('./controllers/studentController')
+const photoController = require('./controllers/photoController')
 
 // HOME ROUTE
 route.get('/', homeController.index) // INDEX
@@ -22,6 +23,7 @@ route.get('/student/:id', loginRequired, studentController.read) // READ
 route.put('/student/:id', loginRequired, studentController.update) // UPDATE
 route.delete('/student/:id', loginRequired, studentController.delete) // DELETE
 route.get('/student/', loginRequired, studentController.index) // INDEX
+route.post('/student/:id', loginRequired, photoController.create) // PHOTO CREATE
 
 
 module.exports = route

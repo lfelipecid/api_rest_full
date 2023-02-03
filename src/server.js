@@ -1,6 +1,7 @@
 const express = require('express')
 const routes = require('./routes')
 const { MongoClient } = require('mongodb')
+const { resolve } = require('path')
 require('dotenv').config()
 
 
@@ -21,6 +22,7 @@ class MyApp {
 
         this.app.use(express.urlencoded({ extended: true }))
         this.app.use(express.json())
+        this.app.use(express.static(resolve(__dirname, 'uploads')))
     }
 
     routes() {
@@ -34,7 +36,6 @@ class MyApp {
                 console.log(`##=> Server runing: http://localhost:${PORT}`)
             })
         })
-
     }
 }
 

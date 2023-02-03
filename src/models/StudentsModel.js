@@ -37,6 +37,10 @@ class StudentModel {
         if (!body.weight) erros.push('Weight empty')
         // Height
         if (!body.height) erros.push('Height empty')
+        // Photo Orginal file name
+        body.originalname = '' 
+        // Photo file name
+        body.filename = ''
         // PhotoPath
         body.photoPath = ''
         // CreateOn
@@ -71,10 +75,9 @@ class StudentModel {
         return user
     }
     // UPDATE
-    async updateStudent(id, body, userEmail) {
+    async updateStudent(id, body) {
         const user = await this.readStudent(id)
-        if(user.createBy !== userEmail) return false
-
+        
         // Parse over BODY and fill USER
         Object.entries(body).forEach(e => {
             const [k, v] = e
@@ -99,6 +102,16 @@ class StudentModel {
     async indexStudent(){
         const users = await this.studentModel.find().sort({createOn: -1}).toArray()
         return users
+    }
+    // PHOTOCREATE
+    async photoCreate(req) {
+
+        const { userId, body } =  req
+        // const user = await this.readStudent(id)
+        // if (!user && user._id !== id) return false
+
+        console.log(userId, body)
+
     }
 
 }
